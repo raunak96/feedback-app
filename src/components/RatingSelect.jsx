@@ -1,11 +1,13 @@
-import { forwardRef, useEffect, useId, useState } from "react";
+import { forwardRef, useContext, useEffect, useId, useState } from "react";
+import FeedbackContext from "../context/FeedbackContext";
 
 const RatingSelect = forwardRef(({ reset }, ref) => {
 	const [rating, setRating] = useState(10);
+	const { selectedFeedback } = useContext(FeedbackContext);
 	const id = useId();
 	useEffect(() => {
-		setRating(10);
-	}, [reset]);
+		setRating(selectedFeedback.item?.rating ?? 10);
+	}, [reset, selectedFeedback.item?.rating]);
 	return (
 		<ul className="rating">
 			{[...Array(10)].map((_, i) => (

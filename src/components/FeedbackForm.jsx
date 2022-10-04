@@ -1,15 +1,30 @@
-import { useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import RatingSelect from "./RatingSelect";
 import Button from "./shared/Button";
 import Card from "./shared/Card";
-import PropTypes from "prop-types";
+import FeedbackContext from "../context/FeedbackContext";
 
-const FeedbackForm = ({ handleAdd }) => {
+const FeedbackForm = () => {
 	const textRef = useRef();
 	const ratingRef = useRef();
 	const [message, setMessage] = useState("");
 	const [isDisabled, setIsDisabled] = useState(true);
 	const [reset, setReset] = useState(0);
+
+	const { addFeedback, selectedFeedback, updateFeedback } =
+		useContext(FeedbackContext);
+	useEffect(() => {
+		if (selectedFeedback.edit) {
+			textRef.current.value = selectedFeedback.item.text;
+			setIsDisabled(false);
+			setMessage("");
+		}
+	}, [
+		selectedFeedback.item?.id,
+		selectedFeedback.item?.text,
+		selectedFeedback.edit,
+	]);
+
 	const handleSubmit = e => {
 		e.preventDefault();
 		if (isDisabled) return;
@@ -17,9 +32,13 @@ const FeedbackForm = ({ handleAdd }) => {
 			text: textRef.current.value,
 			rating: +ratingRef.current.value,
 		};
-		handleAdd(newFeedback);
+		if (selectedFeedback.edit)
+			updateFeedback(selectedFeedback.item.id, newFeedback);
+		else addFeedback(newFeedback);
 		e.target.reset();
 		setReset(prev => prev ^ 1);
+		setIsDisabled(true);
+		setMessage("");
 	};
 	const handleChange = () => {
 		if (textRef.current?.value === "") {
@@ -54,7 +73,5 @@ const FeedbackForm = ({ handleAdd }) => {
 		</Card>
 	);
 };
-FeedbackForm.propTypes = {
-	handleAdd: PropTypes.func.isRequired,
-};
+
 export default FeedbackForm;
