@@ -2,7 +2,7 @@
     "name": "feedback-app",
     "version": "0.1.0",
     "private": true,
-    "homepage": "https://raunak96.github.io/feedback-app/",
+    "homepage": "https://raunak96.github.io/feedback-app",
     "dependencies": {
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^13.4.0",
