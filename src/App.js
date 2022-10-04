@@ -10,7 +10,7 @@ import { FeedbackProvider } from "./context/FeedbackContext";
 const App = () => {
 	return (
 		<FeedbackProvider>
-			<Router>
+			<Router basename={process.env.PUBLIC_URL}>
 				<Header />
 				<div className="container">
 					<Routes>
